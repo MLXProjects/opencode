@@ -3878,7 +3878,7 @@ describe("ProviderTransform.variants", () => {
     })
   })
 
-  test.each(["nvidia", "lilac"])("%s minimax m3 returns chat template thinking toggles", (providerID) => {
+  test.each(["nvidia", "lilac"])("%s minimax m3 returns thinking type toggles (NIM compatible)", (providerID) => {
     const model = createMockModel({
       id: `${providerID}/minimaxai/minimax-m3`,
       providerID,
@@ -3888,9 +3888,10 @@ describe("ProviderTransform.variants", () => {
         npm: "@ai-sdk/openai-compatible",
       },
     })
+	// NIM only accepts thinking.type "enabled" or "disabled" (not "adaptive")
     expect(ProviderTransform.variants(model)).toEqual({
-      none: { chat_template_kwargs: { thinking_mode: "disabled" } },
-      thinking: { chat_template_kwargs: { thinking_mode: "enabled" } },
+      none: { thinking: { type: "disabled" } },
+      thinking: { thinking: { type: "enabled" } },
     })
   })
 
